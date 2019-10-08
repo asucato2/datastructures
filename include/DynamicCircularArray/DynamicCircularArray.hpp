@@ -4,7 +4,7 @@
 #include <iostream>
 
 template <class T>
-class CircularDynamicArray
+class DynamicCircularArray
 {
 protected:
     T *_store; // pointer to array
@@ -270,7 +270,7 @@ protected:
 
 public:
     /// Default Constructor
-    explicit CircularDynamicArray() :
+    explicit DynamicCircularArray() :
             _startIndex(0),
             _endIndex(0),
             _size(0),
@@ -278,7 +278,7 @@ public:
     {
         _store = new T[_capacity];
     }
-    explicit CircularDynamicArray(int capacity) :
+    explicit DynamicCircularArray(int capacity) :
             _startIndex(0),
             _endIndex(0),
             _size(capacity),
@@ -288,7 +288,7 @@ public:
     }
 
     /// Copy Constructor
-    CircularDynamicArray(CircularDynamicArray &copy) :
+    DynamicCircularArray(DynamicCircularArray &copy) :
             _capacity(copy.capacity()),
             _startIndex(0),
             _endIndex(0),
@@ -302,7 +302,7 @@ public:
     }
 
     /// Destructor
-    ~CircularDynamicArray()
+    ~DynamicCircularArray()
     {
         delete[] _store;
     }
@@ -332,7 +332,7 @@ public:
     }
 
     /// Assignment operator
-    CircularDynamicArray& operator= (CircularDynamicArray array)
+    DynamicCircularArray& operator= (DynamicCircularArray array)
     {
         // Self assignment guard
         if (this == &array)

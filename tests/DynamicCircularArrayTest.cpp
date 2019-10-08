@@ -3,38 +3,38 @@
 //
 
 #include <gtest/gtest.h>
-#include "../DynamicCircularArray_lib/CircularDynamicArray.h"
+#include "DynamicCircularArray/DynamicCircularArray.hpp"
 #include <random>
 
 TEST(CircularDynamicArray, defaultConstructorTest)
 {
-    CircularDynamicArray<int> a(10);
+    DynamicCircularArray<int> a(10);
     EXPECT_EQ(a.capacity(), 10);
     EXPECT_EQ(a.length(), 10);
 
-    CircularDynamicArray<std::string> b(100);
+    DynamicCircularArray<std::string> b(100);
     EXPECT_EQ(b.capacity(), 100);
     EXPECT_EQ(b.length(), 100);
 
-    CircularDynamicArray<float> c(1000000);
+    DynamicCircularArray<float> c(1000000);
     EXPECT_EQ(c.capacity(), 1000000);
     EXPECT_EQ(c.length(), 1000000);
 }
 
 TEST(CircularDynamicArray, constructorTest)
 {
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     EXPECT_EQ(a.capacity(), 2);
     EXPECT_EQ(a.length(), 0);
 
-    CircularDynamicArray<std::string> b;
+    DynamicCircularArray<std::string> b;
     EXPECT_EQ(b.capacity(), 2);
     EXPECT_EQ(b.length(), 0);
 }
 
 TEST(CircularDynamicArray, copyConstructorTest)
 {
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     a.addFront(4);
     a.addFront(3);
     a.addEnd(5);
@@ -49,7 +49,7 @@ TEST(CircularDynamicArray, copyConstructorTest)
         EXPECT_EQ(a[i], i);
     }
 
-    CircularDynamicArray<int> b = a;
+    DynamicCircularArray<int> b = a;
     EXPECT_EQ(a.capacity(), b.capacity());
     EXPECT_EQ(a.length(), b.length());
     for (int i = 0; i < 8; i++)
@@ -66,7 +66,7 @@ TEST(CircularDynamicArray, copyConstructorTest)
 
 TEST(CircularDynamicArray, assignmentOperatorTest)
 {
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     a.addFront(4);
     a.addFront(3);
     a.addEnd(5);
@@ -81,7 +81,7 @@ TEST(CircularDynamicArray, assignmentOperatorTest)
         EXPECT_EQ(a[i], i);
     }
 
-    CircularDynamicArray<int> b(1);
+    DynamicCircularArray<int> b(1);
     b = a;
     EXPECT_EQ(a.capacity(), b.capacity());
     EXPECT_EQ(a.length(), b.length());
@@ -107,7 +107,7 @@ TEST(CircularDynamicArray, assignmentOperatorTest)
 
 TEST(CircularDynamicArray, addBackTest)
 {
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     for (int i = 0; i < 1000000; i++)
     {
         a.addEnd(i * 2);
@@ -115,7 +115,7 @@ TEST(CircularDynamicArray, addBackTest)
         ASSERT_EQ(a.length(), i + 1);
     }
 
-    CircularDynamicArray<std::string> b;
+    DynamicCircularArray<std::string> b;
     EXPECT_EQ(b.length(), 0);
     for (int i = 0; i < 1000000; i++)
     {
@@ -127,7 +127,7 @@ TEST(CircularDynamicArray, addBackTest)
 
 TEST(CircularDynamicArray, addFrontTest)
 {
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     for (int i = 0; i < 1000000; i++)
     {
         a.addFront(i * 3);
@@ -135,7 +135,7 @@ TEST(CircularDynamicArray, addFrontTest)
         ASSERT_EQ(a.length(), i + 1);
     }
 
-    CircularDynamicArray<std::string> b;
+    DynamicCircularArray<std::string> b;
     EXPECT_EQ(b.length(), 0);
     for (int i = 0; i < 1000000; i++)
     {
@@ -147,7 +147,7 @@ TEST(CircularDynamicArray, addFrontTest)
 
 TEST(CircularDynamicArray, lengthTest)
 {
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     EXPECT_EQ(a.length(), 0);
     for (int i = 0; i < 1000000; i++)
     {
@@ -158,7 +158,7 @@ TEST(CircularDynamicArray, lengthTest)
 
 TEST(CircularDynamicArray, accessOperatorTest)
 {
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     a.addFront(4);
     a.addFront(3);
     a.addEnd(5);
@@ -178,7 +178,7 @@ TEST(CircularDynamicArray, accessOperatorTest)
 
 TEST(CircularDynamicArray, delFrontTest)
 {
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     a.addFront(4);
     a.addFront(3);
     a.addEnd(5);
@@ -202,7 +202,7 @@ TEST(CircularDynamicArray, delFrontTest)
     EXPECT_EQ(a.length(), 6);
     EXPECT_EQ(a[0], 2);
 
-    CircularDynamicArray<int> b;
+    DynamicCircularArray<int> b;
     for (int i = 0; i < 1000000; i++)
     {
         b.addEnd(i * 2);
@@ -219,7 +219,7 @@ TEST(CircularDynamicArray, delFrontTest)
 
 TEST(CircularDynamicArray, delEndTest)
 {
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     a.addFront(4);
     a.addFront(3);
     a.addEnd(5);
@@ -244,7 +244,7 @@ TEST(CircularDynamicArray, delEndTest)
     EXPECT_EQ(a[5], 5);
 
 
-    CircularDynamicArray<int> b;
+    DynamicCircularArray<int> b;
     for (int i = 0; i < 1000000; i++)
     {
         b.addFront(i * 2);
@@ -262,7 +262,7 @@ TEST(CircularDynamicArray, delEndTest)
 
 TEST(CircularDynamicArray, linearSearchTest)
 {
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     for (int i = 0; i < 1000000; i++)
     {
         a.addEnd(i * 3);
@@ -273,7 +273,7 @@ TEST(CircularDynamicArray, linearSearchTest)
 
 TEST(CircularDynamicArray, quickSelect)
 {
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     a.addEnd(15);
     a.addEnd(18);
     a.addEnd(2);
@@ -299,7 +299,7 @@ TEST(CircularDynamicArray, stableSort)
     std::default_random_engine generator;
     std::uniform_int_distribution<int> distribution(-1000000, 1000000);
     auto randInt = std::bind(distribution, generator);
-    CircularDynamicArray<int> a(100000);
+    DynamicCircularArray<int> a(100000);
 
     for (int i = 0; i < 100000; i++)
     {
@@ -315,7 +315,7 @@ TEST(CircularDynamicArray, stableSort)
 
 TEST(CircularDynamicArray, BinarySearchTest)
 {
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     for (int i = 0; i < 1000000; i++)
     {
         a.addFront(i * 3);
@@ -330,7 +330,7 @@ TEST(CircularDynamicArray, BinarySearchTest)
 
 TEST(CircularDynamicArray, ClearTest)
 {
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     for (int i = 0; i < 1000000; i++)
     {
         a.addEnd(i);
@@ -348,7 +348,7 @@ TEST(CircularDynamicArray, RadixSortTest)
     std::uniform_int_distribution<int> distribution(0, 1000000);
     auto randInt = std::bind(distribution, generator);
 
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     for (int i = 0; i <= 1000000; i++)
         a.addFront(i);
 
@@ -365,7 +365,7 @@ TEST(CircularDynamicArray, RadixSortTest)
 
 TEST(CircularDynamicArray, WCSelectTest)
 {
-    CircularDynamicArray<int> a;
+    DynamicCircularArray<int> a;
     a.addEnd(15);
     a.addEnd(18);
     a.addEnd(2);
