@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(dynamicCircularArray
+project(DataStructures
         VERSION 1.0
         LANGUAGES CXX)
 
@@ -10,6 +10,6 @@ include(package_add_test)
 
 enable_testing()
 
-add_subdirectory(include/DynamicCircularArray)
+add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(extern/googletest)

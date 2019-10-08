@@ -3,7 +3,7 @@
 //
 
 #include <gtest/gtest.h>
-#include "DynamicCircularArray/DynamicCircularArray.hpp"
+#include "DataStructures/DynamicCircularArray.hpp"
 #include <random>
 
 TEST(CircularDynamicArray, defaultConstructorTest)
