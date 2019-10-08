@@ -16,9 +16,9 @@ protected:
     T _errorDump;
 
     /**
-     * @brief Determine corrected index (if you go above or below limits)
-     *
-     * This is the heart of increment and decrement index functions
+     * Main function for traversing circular array - allows easy wrap around access
+     * @param index - index that you are attempting to access
+     * @return corrected index
      */
     int correctIndex(int index)
     {
@@ -34,13 +34,26 @@ protected:
     {
         return correctIndex(index + 1);
     }
-
+    /**
+     * @brief finds median of subarray containing at most 5 elements
+     *
+     * @param arr - input array
+     * @param left - left index of subarray
+     * @param right - right index of subarray
+     * @return median of the subarray
+     */
     int findMedian5(int arr[], int left, int right)
     {
         insertionSort(arr, left, right);
         return (left + right) / 2;
     }
-
+    /**
+     * @brief Simple insertion sort function
+     *
+     * @param arr - array that you want to sort
+     * @param left - left index of subsection you want to sort
+     * @param right - right index of subsection you want to sort
+     */
     void insertionSort(int arr[], const int left, const int right)
     {
         int len = right - left + 1;
@@ -58,7 +71,13 @@ protected:
             arr[j + 1] = t;
         }
     }
-
+    /**
+     * @brief function that finds median of medians for pivot
+     * @param arr - array
+     * @param left - left bound
+     * @param right - right bound
+     * @return index of median
+     */
     int selectPivot(int arr[], int left, int right)
     {
         // Base case
@@ -79,19 +98,35 @@ protected:
             numMedians++;
         }
 
-        return selectPivot(arr, left, left + numMedians);
+        return selectPivot(arr, left, left + numMedians - 1);
     }
-
+    /**
+     * Utility function to swap two elements of array
+     * @param arr - array containing elements to swap
+     * @param a - index of first element
+     * @param b - index of second element
+     */
     void swap(int arr[], int a, int b)
     {
         int temp = arr[a];
         arr[a] = arr[b];
         arr[b] = temp;
     }
-
+    /**
+     * @brief Performs partition: places separates array into subsection that's smaller than pivot and subsection
+     * that's larger
+     *
+     * @param arr - array containing subsection to partition
+     * @param l - left bound of subsection
+     * @param r - right bound of subsection
+     * @param pivot - index of pivot element
+     * @return index of first element greater than the pivot after partitioned
+     */
     int partition(int arr[], int l, int r, int pivot)
     {
-        int pivotVal = arr[l];
+        int pivotVal = arr[pivot];
+        swap(arr, pivot, l);
+
         int firstGreaterIndex = r;
 
         for (int i = r; i > l; i--)
@@ -106,8 +141,17 @@ protected:
         swap(arr, l, firstGreaterIndex); // Plop the pivot val where it belongs
         return firstGreaterIndex;
     }
-
-    int findKthSmallest(int arr[], const int k, int l, int r, bool medianOfMedians = 0)
+    /**
+     * @brief finds kth smallest value in array
+     *
+     * @param arr
+     * @param k - kth smallest value
+     * @param l - left bound of subarray
+     * @param r - right bound of subarray
+     * @param medianOfMedians - option to enable finding median partition value
+     * @return value of kth smallest element in array
+     */
+    int findKthSmallest(int arr[], const int k, int l, int r, bool medianOfMedians = false)
     {
         const int desiredIndex = k - 1; // ex. 2nd smallest is in 1st index
 
@@ -115,7 +159,9 @@ protected:
         {
             int pivotIndex = l;
             if (medianOfMedians)
+            {
                 pivotIndex = selectPivot(arr, l, r);
+            }
 
             int finalIndexOfChosenPivot = partition(arr, l, r, pivotIndex);
 
