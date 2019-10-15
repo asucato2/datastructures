@@ -1,7 +1,3 @@
 add_executable(dynamicCircularArrayTest DynamicCircularArrayTest.cpp)
 
 target_link_libraries(dynamicCircularArrayTest dynamicCircularArray gmock gtest gtest_main)
-
-add_executable(wcselectTest test.cpp)
-
-target_link_libraries(wcselectTest dynamicCircularArray)
