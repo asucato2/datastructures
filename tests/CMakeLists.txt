@@ -1,3 +1,5 @@
-add_executable(dynamicCircularArrayTest DynamicCircularArrayTest.cpp)
+add_executable(DynamicCircularArrayTest DynamicCircularArrayTest.cpp)
+target_link_libraries(DynamicCircularArrayTest DynamicCircularArray gmock gtest gtest_main)
 
-target_link_libraries(dynamicCircularArrayTest dynamicCircularArray gmock gtest gtest_main)
+add_executable(BinarySearchTreeTest BinarySearchTreeTest.cpp)
+target_link_libraries(BinarySearchTreeTest BinarySearchTree gmock gtest gtest_main)
