@@ -15,13 +15,15 @@ namespace DataStructures
   public:
     BinarySearchTree();
     BinarySearchTree(keyType t_key[], valueType t_data[], int t_size);
+    BinarySearchTree(BinarySearchTree &t_tree);
+    BinarySearchTree& operator= (const BinarySearchTree &rhs);
     ~BinarySearchTree();
     
     void inorder();
     void preorder();
     void postorder();
     
-    void insert(keyType t_key, valueType t_data);
+    virtual void insert(keyType t_key, valueType t_data);
     int remove(keyType t_key);
     
     valueType *search(keyType t_key);
@@ -41,18 +43,19 @@ namespace DataStructures
       Node *leftChild;
       Node *rightChild;
     };
-    Node *_head;
+    Node *_root;
     int _size;
     
-    void deleteTree(Node *t_head);
-    Node *max(Node *t_head);
-    Node *min(Node *t_head);
-    Node *successor(Node *t_head);
-    Node *predecessor(Node *t_head);
+    Node* treeCopy(Node *t_root);
+    void deleteTree(Node *t_root);
+    Node *max(Node *t_root);
+    Node *min(Node *t_root);
+    Node *successor(Node *t_root);
+    Node *predecessor(Node *t_root);
     Node *treeSearch(keyType t_key);
-    void inorderTreeWalk(Node *t_head);
-    void preorderTreeWalk(Node *t_head);
-    void postorderTreeWalk(Node *t_head);
+    void inorderTreeWalk(Node *t_root);
+    void preorderTreeWalk(Node *t_root);
+    void postorderTreeWalk(Node *t_root);
     void createNode(Node *t_ptr, keyType t_key, valueType t_data);
     void treeInsert(Node *t_newNode);
     void transplant(Node *t_target, Node *t_replacement);
@@ -62,7 +65,7 @@ namespace DataStructures
   template<typename keyType, typename valueType>
   BinarySearchTree<keyType, valueType>::BinarySearchTree()
           :
-          _head(nullptr),
+          _root(nullptr),
           _size(0)
   {
   }
@@ -70,7 +73,7 @@ namespace DataStructures
   template<typename keyType, typename valueType>
   BinarySearchTree<keyType, valueType>::BinarySearchTree(keyType t_key[], valueType t_data[], const int t_size)
           :
-          _head(nullptr),
+          _root(nullptr),
           _size(0)
   {
     for (int i = 0;
@@ -82,38 +85,52 @@ namespace DataStructures
   }
   
   template<typename keyType, typename valueType>
-  BinarySearchTree<keyType, valueType>::~BinarySearchTree()
+  BinarySearchTree<keyType, valueType>::BinarySearchTree(BinarySearchTree<keyType, valueType> &t_tree)
   {
-    deleteTree(_head);
+    _root = treeCopy(t_tree._root);
   }
   
   template<typename keyType, typename valueType>
-  void BinarySearchTree<keyType, valueType>::deleteTree(Node *t_head)
+  BinarySearchTree<keyType, valueType>& BinarySearchTree<keyType, valueType>::operator= (const BinarySearchTree<keyType, valueType> &rhs)
   {
-    if (t_head != nullptr)
+    deleteTree(_root);
+    _root = treeCopy(rhs._root);
+    return *this;
+  }
+  
+  template<typename keyType, typename valueType>
+  BinarySearchTree<keyType, valueType>::~BinarySearchTree()
+  {
+    deleteTree(_root);
+  }
+  
+  template<typename keyType, typename valueType>
+  void BinarySearchTree<keyType, valueType>::deleteTree(Node *t_root)
+  {
+    if (t_root != nullptr)
     {
-      deleteTree(t_head->leftChild);
-      deleteTree(t_head->rightChild);
-      delete t_head;
+      deleteTree(t_root->leftChild);
+      deleteTree(t_root->rightChild);
+      delete t_root;
     }
   }
   
   template<typename keyType, typename valueType>
   void BinarySearchTree<keyType, valueType>::inorder()
   {
-    inorderTreeWalk(_head);
+    inorderTreeWalk(_root);
   }
   
   template<typename keyType, typename valueType>
   void BinarySearchTree<keyType, valueType>::preorder()
   {
-    preorderTreeWalk(_head);
+    preorderTreeWalk(_root);
   }
   
   template<typename keyType, typename valueType>
   void BinarySearchTree<keyType, valueType>::postorder()
   {
-    postorderTreeWalk(_head);
+    postorderTreeWalk(_root);
   }
   
   template<typename keyType, typename valueType>
@@ -124,7 +141,7 @@ namespace DataStructures
     
     if (_size == 0)
     {
-      _head = newNode;
+      _root = newNode;
       _size++;
     }
     else
@@ -192,7 +209,7 @@ namespace DataStructures
   template<typename keyType, typename valueType>
   int BinarySearchTree<keyType, valueType>::rank(const keyType t_key)
   {
-    Node *curNode = _head;
+    Node *curNode = _root;
     int rank = 1;
     
     while (curNode != nullptr)
@@ -216,10 +233,38 @@ namespace DataStructures
   }
   
   template<typename keyType, typename valueType>
+  typename BinarySearchTree<keyType, valueType>::Node* BinarySearchTree<keyType, valueType>::treeCopy(Node *t_root)
+  {
+    if (t_root == nullptr)
+    {
+      return nullptr;
+    }
+    
+    Node* newNode = new Node;
+    newNode->key = t_root->key;
+    newNode->data = t_root->data;
+    newNode->weight = t_root->weight;
+    newNode->parent = t_root->parent;
+    
+    newNode->leftChild = treeCopy(t_root->leftChild);
+    if (newNode->leftChild != nullptr)
+    {
+      newNode->leftChild->parent = newNode;
+    }
+    
+    newNode->rightChild = treeCopy(t_root->rightChild);
+    if (newNode->rightChild != nullptr)
+    {
+      newNode->rightChild->parent = newNode;
+    }
+    return newNode;
+  }
+  
+  template<typename keyType, typename valueType>
   typename BinarySearchTree<keyType, valueType>::Node *
   BinarySearchTree<keyType, valueType>::treeSearch(const keyType t_key)
   {
-    Node *curNode = _head;
+    Node *curNode = _root;
     while (curNode != nullptr && t_key != curNode->key)
     {
       if (t_key < curNode->key)
@@ -256,7 +301,7 @@ namespace DataStructures
   template<typename keyType, typename valueType>
   void BinarySearchTree<keyType, valueType>::treeInsert(Node *t_newNode)
   {
-    Node *curNode = _head;
+    Node *curNode = _root;
     Node *p = nullptr;
     
     while (curNode != nullptr)
@@ -289,9 +334,9 @@ namespace DataStructures
   template<typename keyType, typename valueType>
   void BinarySearchTree<keyType, valueType>::transplant(Node *t_target, Node *t_replacement)
   {
-    if (t_target == _head)
+    if (t_target == _root)
     {
-      _head = t_replacement;
+      _root = t_replacement;
     }
     else if (t_target == t_target->parent->leftChild)
     {
@@ -309,42 +354,42 @@ namespace DataStructures
   }
   
   template<typename keyType, typename valueType>
-  void BinarySearchTree<keyType, valueType>::inorderTreeWalk(Node *t_head)
+  void BinarySearchTree<keyType, valueType>::inorderTreeWalk(Node *t_root)
   {
-    if (t_head != nullptr)
+    if (t_root != nullptr)
     {
-      inorderTreeWalk(t_head->leftChild);
-      std::cout << t_head->key << std::endl;
-      inorderTreeWalk(t_head->rightChild);
+      inorderTreeWalk(t_root->leftChild);
+      std::cout << t_root->key << std::endl;
+      inorderTreeWalk(t_root->rightChild);
     }
   }
   
   template<typename keyType, typename valueType>
-  void BinarySearchTree<keyType, valueType>::preorderTreeWalk(Node *t_head)
+  void BinarySearchTree<keyType, valueType>::preorderTreeWalk(Node *t_root)
   {
-    if (t_head != nullptr)
+    if (t_root != nullptr)
     {
-      std::cout << t_head->key << std::endl;
-      preorderTreeWalk(t_head->leftChild);
-      preorderTreeWalk(t_head->rightChild);
+      std::cout << t_root->key << std::endl;
+      preorderTreeWalk(t_root->leftChild);
+      preorderTreeWalk(t_root->rightChild);
     }
   }
   
   template<typename keyType, typename valueType>
-  void BinarySearchTree<keyType, valueType>::postorderTreeWalk(Node *t_head)
+  void BinarySearchTree<keyType, valueType>::postorderTreeWalk(Node *t_root)
   {
-    if (t_head != nullptr)
+    if (t_root != nullptr)
     {
-      postorderTreeWalk(t_head->leftChild);
-      postrderTreeWalk(t_head->rightChild);
-      std::cout << t_head->key << std::endl;
+      postorderTreeWalk(t_root->leftChild);
+      postrderTreeWalk(t_root->rightChild);
+      std::cout << t_root->key << std::endl;
     }
   }
   
   template<typename keyType, typename valueType>
-  typename BinarySearchTree<keyType, valueType>::Node *BinarySearchTree<keyType, valueType>::max(Node *t_head)
+  typename BinarySearchTree<keyType, valueType>::Node *BinarySearchTree<keyType, valueType>::max(Node *t_root)
   {
-    Node *curNode = t_head;
+    Node *curNode = t_root;
     if (curNode == nullptr)
     {
       return nullptr;
@@ -357,9 +402,9 @@ namespace DataStructures
   }
   
   template<typename keyType, typename valueType>
-  typename BinarySearchTree<keyType, valueType>::Node *BinarySearchTree<keyType, valueType>::min(Node *t_head)
+  typename BinarySearchTree<keyType, valueType>::Node *BinarySearchTree<keyType, valueType>::min(Node *t_root)
   {
-    Node *curNode = t_head;
+    Node *curNode = t_root;
     if (curNode == nullptr)
     {
       return nullptr;
@@ -373,15 +418,15 @@ namespace DataStructures
   }
   
   template<typename keyType, typename valueType>
-  typename BinarySearchTree<keyType, valueType>::Node *BinarySearchTree<keyType, valueType>::successor(Node *t_head)
+  typename BinarySearchTree<keyType, valueType>::Node *BinarySearchTree<keyType, valueType>::successor(Node *t_root)
   {
-    if (t_head->rightChild != nullptr)
+    if (t_root->rightChild != nullptr)
     {
-      return min(t_head->rightChild);
+      return min(t_root->rightChild);
     }
     
-    Node *curNode = t_head;
-    Node *p = t_head->parent;
+    Node *curNode = t_root;
+    Node *p = t_root->parent;
     
     while (p != nullptr && curNode == p->rightChild)
     {
@@ -392,15 +437,15 @@ namespace DataStructures
   }
   
   template<typename keyType, typename valueType>
-  typename BinarySearchTree<keyType, valueType>::Node *BinarySearchTree<keyType, valueType>::predecessor(Node *t_head)
+  typename BinarySearchTree<keyType, valueType>::Node *BinarySearchTree<keyType, valueType>::predecessor(Node *t_root)
   {
-    if (t_head->leftChild != nullptr)
+    if (t_root->leftChild != nullptr)
     {
-      return max(t_head->leftChild);
+      return max(t_root->leftChild);
     }
     
-    Node *curNode = t_head;
-    Node *p = t_head->parent;
+    Node *curNode = t_root;
+    Node *p = t_root->parent;
     
     while (p != nullptr && curNode == p->leftChild)
     {
@@ -424,7 +469,7 @@ namespace DataStructures
   template<typename keyType, typename valueType>
   keyType BinarySearchTree<keyType, valueType>::select(const int t_pos)
   {
-    Node *curNode = _head;
+    Node *curNode = _root;
     int rank = 0;
     
     while (curNode != nullptr)

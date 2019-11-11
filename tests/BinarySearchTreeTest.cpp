@@ -69,6 +69,77 @@ TEST(BSTTest, ConstructorTwoTest)
   EXPECT_EQ(a.size(), SIZE);
 }
 
+TEST(BSTTest, CopyConstructorTest)
+{
+  const int SIZE = 10;
+  
+  int keys[SIZE];
+  std::string data[SIZE];
+  
+  std::default_random_engine generator;
+  std::uniform_int_distribution<int> distribution(0, SIZE - 1);
+  auto rand = std::bind(distribution, generator);
+  
+  for (int i = 0; i < SIZE; i++)
+  {
+    keys[i] = i;
+  }
+  for (int i = 0; i < SIZE; i++)
+  {
+    swap(keys, i, rand());
+  }
+  for (int i = 0; i < SIZE; i++)
+  {
+    data[i] = "S " + std::to_string(keys[i]);
+  }
+  
+  DataStructures::BinarySearchTree<int, std::string> a(keys, data, SIZE);
+  
+  DataStructures::BinarySearchTree<int, std::string> b = a;
+  EXPECT_EQ(*a.search(SIZE / 2), *b.search(SIZE / 2));
+  a.remove(SIZE / 2);
+  EXPECT_EQ(a.search(SIZE / 2), nullptr);
+  EXPECT_NE(b.search(SIZE / 2), nullptr);
+  EXPECT_EQ(*b.search(SIZE / 2), "S " + std::to_string(SIZE / 2));
+}
+
+TEST(BSTTest, AssignmentOperatorTest)
+{
+  const int SIZE = 10;
+  
+  int keys[SIZE];
+  std::string data[SIZE];
+  
+  std::default_random_engine generator;
+  std::uniform_int_distribution<int> distribution(0, SIZE - 1);
+  auto rand = std::bind(distribution, generator);
+  
+  for (int i = 0; i < SIZE; i++)
+  {
+    keys[i] = i;
+  }
+  for (int i = 0; i < SIZE; i++)
+  {
+    swap(keys, i, rand());
+  }
+  for (int i = 0; i < SIZE; i++)
+  {
+    data[i] = "S " + std::to_string(keys[i]);
+  }
+  
+  DataStructures::BinarySearchTree<int, std::string> a(keys, data, SIZE);
+  
+  DataStructures::BinarySearchTree<int, std::string> b;
+  b.insert(12, "S 12");
+  b = a;
+  EXPECT_EQ(*a.search(SIZE / 2), *b.search(SIZE / 2));
+  a.remove(SIZE / 2);
+  EXPECT_EQ(a.search(SIZE / 2), nullptr);
+  EXPECT_NE(b.search(SIZE / 2), nullptr);
+  EXPECT_EQ(*b.search(SIZE / 2), "S " + std::to_string(SIZE / 2));
+}
+
+
 TEST(BSTTest, SearchTest)
 {
   const int SIZE = 10000;
@@ -164,6 +235,13 @@ TEST(BSTTest, RankTest)
   for (int i = 0; i < SIZE; i++)
   {
     EXPECT_EQ(a.rank(i), i + 1);
+  }
+  
+  DataStructures::BinarySearchTree<int, std::string> b = a;
+  
+  for (int i = 0; i < SIZE; i++)
+  {
+    EXPECT_EQ(b.rank(i), i + 1);
   }
   
   delete[] keys;
