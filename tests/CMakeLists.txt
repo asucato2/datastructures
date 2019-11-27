@@ -6,3 +6,7 @@ target_link_libraries(BinarySearchTreeTest BinarySearchTree gmock gtest gtest_ma
 
 add_executable(HeapTest HeapTest.cpp)
 target_link_libraries(HeapTest Heap gmock gtest gtest_main)
+
+add_executable(RBTreeTest RBTreeTest.cpp)
+target_link_libraries(RBTreeTest RBTree gmock gtest gtest_main)
+
