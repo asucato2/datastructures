@@ -3,3 +3,6 @@ target_link_libraries(DynamicCircularArrayTest DynamicCircularArray gmock gtest 
 
 add_executable(BinarySearchTreeTest BinarySearchTreeTest.cpp)
 target_link_libraries(BinarySearchTreeTest BinarySearchTree gmock gtest gtest_main)
+
+add_executable(HeapTest HeapTest.cpp)
+target_link_libraries(HeapTest Heap gmock gtest gtest_main)

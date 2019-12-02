@@ -6,6 +6,7 @@
 #include "DataStructures/DynamicCircularArray.hpp"
 #include <random>
 
+using namespace DataStructures;
 TEST(CircularDynamicArray, defaultConstructorTest)
 {
     DynamicCircularArray<int> a(10);
