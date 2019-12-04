@@ -13,3 +13,7 @@ set_target_properties(Heap PROPERTIES LINKER_LANGUAGE CXX)
 add_library(RBTree ${DataStructures_SOURCE_DIR}/include/DataStructures/RBTree.hpp)
 target_include_directories(RBTree PUBLIC ../include)
 set_target_properties(RBTree PROPERTIES LINKER_LANGUAGE CXX)
+
+add_library(BHeap ${DataStructures_SOURCE_DIR}/include/DataStructures/BHeap.hpp)
+target_include_directories(BHeap PUBLIC ../include)
+set_target_properties(BHeap PROPERTIES LINKER_LANGUAGE CXX)

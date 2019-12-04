@@ -12,3 +12,6 @@ target_link_libraries(RBTreeTest RBTree gmock gtest gtest_main)
 
 add_executable(Phase2 phase2.cpp)
 target_link_libraries(Phase2 RBTree)
+
+add_executable(BHeapTest BHeapTest.cpp)
+target_link_libraries(BHeapTest BHeap gmock gtest gtest_main)
