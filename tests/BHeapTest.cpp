@@ -16,6 +16,7 @@ TEST(BHeapTest, DefaultConstructorTest)
 TEST(BHeapTest, PrintKeyTest)
 {
   DataStructures::BHeap<int, std::string> a;
+  a.insert(1, std::to_string(1));
   a.printKey();
 }
 

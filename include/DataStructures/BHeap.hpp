@@ -64,9 +64,65 @@ namespace DataStructures
   }
   
   template<typename keyType, typename valueType>
-  void BHeap<keyType, valueType>::merge(BHeap<keyType, valueType> h1)
+  void BHeap<keyType, valueType>::merge(BHeap<keyType, valueType> h2)
   {
-  
+    Node *cur1 = this->_head;
+    Node *cur2 = h2._head;
+    Node *cur3 = nullptr;
+    Node *temp = nullptr;
+    
+    if (cur1->degree <= cur2->degree)
+    {
+      cur3 = cur1;
+      cur1 = cur1->sibling;
+    }
+    else
+    {
+      cur3 = cur2;
+      cur2 = cur2->sibling;
+    }
+    temp = cur3;
+    
+    // link all trees in order of degree (two trees can have same degree)
+    while (cur1 != nullptr && cur2 != nullptr)
+    {
+      if (cur1->degree <= cur2->degree)
+      {
+        cur3->sibling = cur1;
+        cur1 = cur1->sibling;
+      }
+      else
+      {
+        cur3->sibling = cur2;
+        cur2 = cur2->sibling;
+      }
+      cur3 = cur3->sibling;
+    }
+    
+    // copy all remaining trees of heap1
+    while (cur1 != nullptr)
+    {
+      cur3->sibling = cur1;
+      cur1 = cur1->sibling;
+      cur3 = cur3->sibling;
+    }
+    
+    // copy all remaining trees of heap2
+    while (cur2 != nullptr)
+    {
+      cur3->sibling = cur2;
+      cur2 = cur2->sibling;
+      cur3 = cur3->sibling;
+    }
+    
+    cur1 = this->_head;
+    while (cur1 != nullptr && cur1->sibling != nullptr)
+    {
+      if (cur1->degree == cur1->sibling->degree)
+      {
+        mergeSameDegreeTrees(cur1, cur1->sibling);
+      }
+    }
   }
   
   template<typename keyType, typename valueType>
@@ -113,6 +169,16 @@ namespace DataStructures
       BTreePrintKey(t_head->child);
       BTreePrintKey(t_head->sibling);
     }
+  }
+  
+  template<typename keyType, typename valueType>
+  void BHeap<keyType, valueType>::insert(const keyType t_key, const valueType t_value)
+  {
+    Node* newNode = new Node;
+    initializeNode(newNode, t_key, t_value, 0);
+    BHeap<keyType, valueType> newHeap;
+    newHeap._head = newNode;
+    this->merge(newHeap);
   }
 }
 
