@@ -10,3 +10,5 @@ target_link_libraries(HeapTest Heap gmock gtest gtest_main)
 add_executable(RBTreeTest RBTreeTest.cpp)
 target_link_libraries(RBTreeTest RBTree gmock gtest gtest_main)
 
+add_executable(Phase2 phase2.cpp)
+target_link_libraries(Phase2 RBTree)
