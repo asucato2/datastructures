@@ -156,6 +156,8 @@ namespace DataStructures
     minHeapifyUp(_heapSize - 1);
   }
   
+  /// \brief Restores min heap property by bubbling down node at t_index
+  /// \param t_index
   template<typename keyType, typename valueType>
   void Heap<keyType, valueType>::minHeapifyDown(const int t_index)
   {
@@ -189,6 +191,8 @@ namespace DataStructures
     }
   }
   
+  /// \brief Maintain minheap property by bubbling up node at t_index
+  /// \param t_index
   template<typename keyType, typename valueType>
   void Heap<keyType, valueType>::minHeapifyUp(const int t_index)
   {
