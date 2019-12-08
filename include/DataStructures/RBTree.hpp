@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <list>
+#include <vector>
 
 namespace DataStructures
 {
@@ -67,7 +68,7 @@ namespace DataStructures
     void treeDelete(Node *t_root);
     Node* treeMin(Node *t_root) const;
     Node* treeMax(const Node *t_root) const;
-    void inorderTreeWalkList(const Node *t_head, std::list<Node> nodes);
+    void inorderTreeWalkList(const Node *t_head, std::vector<Node> &nodes);
   };
   
   template<typename keyType, typename valueType>
@@ -401,34 +402,26 @@ namespace DataStructures
   void
   RBTree<keyType, valueType>::split(const keyType t_key, RBTree<keyType, valueType> &T1, RBTree<keyType, valueType> &T2)
   {
-//    std::list<Node> nodes;
-//    keyType keys[size()];
-//    valueType values[size()];
-//
-//    inorderTreeWalkList(_root, nodes);
-//    for (int i = 0; i < size(); i++)
-//    {
-//      Node curNode;
-//      curNode = nodes.front();
-//      nodes.pop_front();
-//      keys[i] = curNode.key;
-//      values[i] = curNode.value;
-//    }
-//
-//    int splitIndex = 0;
-//    while (t_key <= keys[splitIndex])
-//    {
-//      splitIndex++;
-//    }
-//
-//    for (int i = 0; i < splitIndex + 1; i++)
-//    {
-//      T1.insert(keys[i], values[i]);
-//    }
-//    for (int i = splitIndex+1; i < size(); i++)
-//    {
-//      T2.insert(keys[i], values[i]);
-//    }
+    std::vector<Node> nodes;
+    inorderTreeWalkList(_root, nodes);
+  
+    int splitIndex = 0;
+    for (auto it = nodes.begin(); it != nodes.end(); it++, splitIndex++)
+    {
+      if (it->key >= t_key)
+      {
+        break;
+      }
+    }
+  
+    for (int i = 0; i < splitIndex; i++)
+    {
+      T1.insert(nodes[i].key, nodes[i].value);
+    }
+    for (int i = splitIndex; i < nodes.size(); i++)
+    {
+      T2.insert(nodes[i].key, nodes[i].value);
+    }
   }
   
   template<typename keyType, typename valueType>
@@ -595,7 +588,7 @@ namespace DataStructures
   }
   
   template<typename keyType, typename valueType>
-  void RBTree<keyType, valueType>::inorderTreeWalkList(const RBTree::Node *t_head, std::list<Node> node)
+  void RBTree<keyType, valueType>::inorderTreeWalkList(const RBTree::Node *t_head, std::vector<Node> &node)
   {
     if (t_head == nullptr)
     {
